@@ -26,7 +26,7 @@ jobs:
       - name: Build Spring Boot & OWASP Dependency Check
         # Ci spostiamo nella cartella back-end ed eseguiamo la build Maven con il controllo OWASP
         working-directory: ./back-end
-        run: .\mvnw clean verify -DskipTests=true
+        run: ./mvnw clean verify -DskipTests=true
 
       # --- CONTROLLO front-end (Angular) ---
       - name: Configura Node.js
