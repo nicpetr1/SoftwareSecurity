@@ -1,0 +1,16 @@
+<html xmlns:th="https://www.thymeleaf.org">
+	<head>
+		<title>
+			Aggiorna prodotti
+		</title>
+	</head>	
+
+	<body>
+		<form th:action="@{/aggiornaProdotto/{codice}(codice=${codice})}" method ="POST">
+		
+		<input type = "text" id = "quantita" name = "quantita" placeholder="quantita"> <br>
+			<input type = "submit" value="invia">
+		</form>	
+		
+	</body>
+</html>

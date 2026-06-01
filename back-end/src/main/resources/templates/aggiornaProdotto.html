@@ -1,0 +1,34 @@
+<html xmlns:th="https://www.thymeleaf.org">
+	<head>
+		<title>
+			Aggiorna prodotti
+		</title>
+	</head>	
+
+	<body>
+		<table style="width:80%" border="1" >
+    <thead>
+  <tr>
+    <th>codice</th>
+    <th>Nome</th>
+    <th>Descrizione</th>
+    <th>Prezzo</th>
+    <th>Quantita</th>
+    <th>Aggiorna</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="prodotto:${prodotti}">
+        <td th:text="${prodotto.codice}"></td>
+        <td th:text="${prodotto.nome}"></td>
+        <td th:text="${prodotto.descrizione}"></td>
+        <td th:text="${prodotto.prezzo}"></td>
+        <td th:text="${prodotto.quantita}"></td>
+        <td> <a th:href="@{/aggiornaProdotto/{codice}(codice=${prodotto.codice})}"> Rimuovi dal negozio </a></td>
+  </tr>
+  </tbody>
+</table>
+
+	<a href = "/gestore"> Ritorna alle operazioni </a>
+	</body>
+</html>

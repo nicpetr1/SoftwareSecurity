@@ -1,0 +1,14 @@
+<html xmlns:th="https://www.thymeleaf.org">
+	<head>
+		<title>
+			Login
+		</title>
+	</head>	
+
+	<body>
+		<form th:action = "@{/prodotti/inserisciprodotto/{codice}(codice=${codice})}" method = "POST">
+			<input type = "text" id = "quantitaInserita" name = "quantitaInserita" placeholder="quantitaInserita"> <br>
+			<input type = "submit" value="invia">
+		</form>
+	</body>
+</html>

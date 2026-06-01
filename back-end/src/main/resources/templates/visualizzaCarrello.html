@@ -1,0 +1,39 @@
+<html xmlns:th="https://www.thymeleaf.org">
+	<head>
+		<title>
+			Carrello
+		</title>
+	</head>
+	
+	<body>
+		<table style="width:80%" border="1" >
+    <thead>
+  <tr>
+    <th>username</th>
+    <th>nome</th>
+    <th>descrizione</th>
+    <th>quantitaInserita</th>
+    <th>Prezzo</th>
+    <th> Decrementa quantita </th>
+    <th>Rimuovi</th>
+    
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="inserimento:${inserimenti}">
+        <td th:text="${inserimento.cliente}"></td>
+        <td th:text="${inserimento.prod.nome}"></td>
+        <td th:text="${inserimento.prod.descrizione}"></td>
+        <td th:text="${inserimento.quantitaInserita}"></td>
+        <td th:text="${inserimento.prod.prezzo}"></td>
+        <td> <a th:href="@{/visualizzacarrello/decrementaquantita/{codice}(codice=${inserimento.prod.codice})}"> Decrementa </a> </td>
+        <td> <a th:href="@{/visualizzacarrello/rimuoviprodotto/{codice}(codice=${inserimento.prod.codice})}"> Rimuovi </a> </td>
+  </tr>
+  </tbody>
+</table>
+	<a href = "/acquista"> Acquista i prodotti nel carrello </a>
+	<a href = "/prodotti"> Ritorna ai prodotti </a>
+	</body>
+	 
+	
+</html>
