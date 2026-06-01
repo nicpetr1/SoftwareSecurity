@@ -1,0 +1,83 @@
+<div class="login-container">
+  <div class="login-card shadow p-4 p-md-5">
+
+    <h2 class="text-center mb-4">
+      <i class="fa-solid fa-cart-shopping me-2"></i>
+      Il tuo Carrello
+    </h2>
+
+    <div *ngIf="isLoading" class="text-center">
+      <p>Caricamento del carrello...</p>
+    </div>
+
+    <div *ngIf="!isLoading">
+      
+      <div *ngIf="items.length > 0; else carrelloVuoto">
+        
+        <ul class="list-group mb-3">
+          <li *ngFor="let item of items" class="list-group-item d-flex justify-content-between align-items-center">
+            
+            <div>
+              <h6 class="my-0">{{ item.prodotto.nome }}</h6>
+              <small class="text-muted">
+                {{ item.prodotto.prezzo | currency:'EUR':'symbol' }}
+                x {{ item.quantitaInserita }}
+              </small>
+            </div>
+
+            <button (click)="rimuoviDalCarrello(item)" class="btn btn-outline-danger btn-sm">
+              <i class="fa-solid fa-trash"></i>
+            </button>
+          </li>
+        </ul>
+
+        <h4 class="text-end mb-4">
+          Totale: {{ totale | currency:'EUR':'symbol' }}
+        </h4>
+
+        <button (click)="procediAlCheckout()" class="btn btn-primary w-100 btn-lg">
+          Vai al Checkout
+        </button>
+        <a routerLink="/" class="btn btn-outline-secondary w-100 btn-lg mt-3">
+          Continua gli acquisti
+        </a>
+
+      </div>
+
+      <ng-template #carrelloVuoto>
+        <div class="text-center">
+          <p class="lead">Il tuo carrello è vuoto.</p>
+          <a routerLink="" class="btn btn-primary btn-lg mt-3">
+            <i class="fa-solid fa-store me-2"></i>
+            Inizia gli acquisti
+          </a>
+        </div>
+      </ng-template>
+
+    </div> </div>
+</div>
+
+<div class="login-container">
+  <div class="login-card shadow p-4 p-md-5">
+    
+    </div>
+</div>
+
+
+<div *ngIf="checkoutMessage" class="popup-overlay">
+
+  <div class="login-card shadow p-4 p-md-5 text-center">
+
+    <h2 class="mb-4">
+      <i *ngIf="checkoutMessage.type === 'success'" class="fa-solid fa-circle-check text-success"></i>
+      <i *ngIf="checkoutMessage.type === 'error'" class="fa-solid fa-circle-exclamation text-danger"></i>
+    </h2>
+    
+    <p class="lead">{{ checkoutMessage.text }}</p>
+    
+    <button (click)="chiudiPopup()" class="btn btn-primary w-100 btn-lg mt-4">
+      Torna ai prodotti
+    </button>
+
+  </div>
+</div>
