@@ -1,0 +1,15 @@
+version: 2
+updates:
+  # 1. Controllo di Sicurezza ed Aggiornamenti per Spring Boot (Backend)
+  - package-ecosystem: "maven"
+    directory: "/back-end" # Dice a Dependabot di cercare il pom.xml qui dentro
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+
+  # 2. Controllo di Sicurezza ed Aggiornamenti per Angular (Frontend)
+  - package-ecosystem: "npm"
+    directory: "/front-end" # Dice a Dependabot di cercare il package.json qui dentro
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
