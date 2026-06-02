@@ -60,10 +60,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "AppAntiquariato:build:production"
+              "buildTarget": "AppAntiquariato:build:production"
             },
             "development": {
-              "browserTarget": "AppAntiquariato:build:development"
+              "buildTarget": "AppAntiquariato:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -71,7 +71,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "AppAntiquariato:build"
+            "buildTarget": "AppAntiquariato:build"
           }
         },
         "test": {
