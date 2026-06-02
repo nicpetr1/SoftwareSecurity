@@ -4,9 +4,10 @@ import { CarrelloService } from '../../services/carrello.service';
 import Swal from 'sweetalert2'
 
 @Component({
-  selector: 'app-carrello',
-  templateUrl: './carrello.component.html',
-  styleUrls: ['./carrello.component.css']
+    selector: 'app-carrello',
+    templateUrl: './carrello.component.html',
+    styleUrls: ['./carrello.component.css'],
+    standalone: false
 })
 export class CarrelloComponent implements OnInit {
 

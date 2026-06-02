@@ -4,9 +4,10 @@ import { ProdottiService } from '../../services/prodotti.service';
 import { FormInserimento } from '../../interfaces/formInserimento';
 
 @Component({
-  selector: 'app-aggiungi-prodotto',
-  templateUrl: './aggiungi-prodotto.component.html',
-  styleUrls: ['./aggiungi-prodotto.component.css']
+    selector: 'app-aggiungi-prodotto',
+    templateUrl: './aggiungi-prodotto.component.html',
+    styleUrls: ['./aggiungi-prodotto.component.css'],
+    standalone: false
 })
 
 export class AggiungiProdottoComponent {

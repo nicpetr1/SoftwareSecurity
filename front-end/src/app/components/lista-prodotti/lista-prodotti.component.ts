@@ -7,9 +7,10 @@ import { KeycloakService } from 'src/app/services/keycloak.service';
 import Swal from 'sweetalert2';
 
 @Component({
-  selector: 'app-lista-prodotti',
-  templateUrl: './lista-prodotti.component.html',
-  styleUrls: ['./lista-prodotti.component.css']
+    selector: 'app-lista-prodotti',
+    templateUrl: './lista-prodotti.component.html',
+    styleUrls: ['./lista-prodotti.component.css'],
+    standalone: false
 })
 export class ListaProdottiComponent implements OnInit{
 

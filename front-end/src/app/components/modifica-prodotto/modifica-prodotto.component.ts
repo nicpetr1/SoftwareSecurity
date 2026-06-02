@@ -5,9 +5,10 @@ import { Prodotto } from '../../interfaces/prodotto';
 import Swal from 'sweetalert2'
 
 @Component({
-  selector: 'app-modifica-prodotto',
-  templateUrl: './modifica-prodotto.component.html',
-  styleUrls: ['./modifica-prodotto.component.css']
+    selector: 'app-modifica-prodotto',
+    templateUrl: './modifica-prodotto.component.html',
+    styleUrls: ['./modifica-prodotto.component.css'],
+    standalone: false
 })
 export class ModificaProdottoComponent implements OnInit {
 
