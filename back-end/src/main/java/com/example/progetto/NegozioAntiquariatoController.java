@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.HtmlUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -44,6 +45,7 @@ import java.util.Map;
 @RestController
 public class NegozioAntiquariatoController {
 
+	@PreAuthorize("hasAuthority('ROLE_client_cliente')")
 	@GetMapping("/cliente/prodotti")
 	public ResponseEntity<?> prodotti() {
 		try {
@@ -59,6 +61,7 @@ public class NegozioAntiquariatoController {
 		}
 	}
 	
+	@PreAuthorize("hasAuthority('ROLE_client_gestore')")
 	@GetMapping("/gestore/prodotti")
 	public ResponseEntity<?> prodottiGestore() {
 		try {
@@ -74,6 +77,7 @@ public class NegozioAntiquariatoController {
 		}
 	}
 	
+	@PreAuthorize("hasAuthority('ROLE_client_cliente')")
 	@PostMapping("/cliente/prodotti/inserisci/{codice}")
 	public ResponseEntity<?> inserisciProdotto(@PathVariable(value="codice") String codice, 
 			@RequestParam Map<String,String> allRequestParams, JwtAuthenticationToken auth) {
@@ -153,6 +157,7 @@ public class NegozioAntiquariatoController {
 	}
 	
 	
+	@PreAuthorize("hasAuthority('ROLE_client_cliente')")
 	@GetMapping("/cliente/visualizza")
 	public ResponseEntity<?> visualizzaCarrello(JwtAuthenticationToken auth) {
 		try {
@@ -168,6 +173,7 @@ public class NegozioAntiquariatoController {
 		}	
 	}
 	
+	@PreAuthorize("hasAuthority('ROLE_client_cliente')")
 	@GetMapping("/cliente/visualizza/decrementa/{codice}")
 	public ResponseEntity<?> decrementaQuantitaInserita(
 	        @PathVariable(value="codice") String codice, 
@@ -229,6 +235,7 @@ public class NegozioAntiquariatoController {
 	    }
 	}
 	
+	@PreAuthorize("hasAuthority('ROLE_client_cliente')")
 	@GetMapping("/carrello/prodotti/{codice}")
 	public ResponseEntity<Map<String, Object>> rimuoviProdotto(@PathVariable(value="codice") String codice, JwtAuthenticationToken auth) {
 	    Map<String, Object> response = new HashMap<>();
@@ -292,6 +299,7 @@ public class NegozioAntiquariatoController {
 	 * */
 	
 
+	@PreAuthorize("hasAuthority('ROLE_client_cliente')")
 	@PostMapping("/cliente/acquista")
 	public ResponseEntity<?> acquista(JwtAuthenticationToken auth) {
 	    String username = auth.getToken().getClaimAsString("preferred_username");
@@ -359,6 +367,7 @@ public class NegozioAntiquariatoController {
 
 	}
 	
+	@PreAuthorize("hasAuthority('ROLE_client_gestore')")
 	@PostMapping("gestore/aggiungi")
 	public ResponseEntity<?> aggiungiProdotto(@RequestParam Map<String,String> allRequestParams) {
 	    String nome = HtmlUtils.htmlEscape(allRequestParams.get("nome"));
@@ -401,7 +410,7 @@ public class NegozioAntiquariatoController {
 	    }
 	}
 	
-
+	@PreAuthorize("hasAuthority('ROLE_client_gestore')")
 	@PostMapping("/gestore/rimuovi/{codice}")
 	public ResponseEntity<?> rimuoviProdotto(@PathVariable(value = "codice") String codiceProdotto) {
 	    Map<String, String> responseBody = new HashMap<>();
@@ -429,7 +438,7 @@ public class NegozioAntiquariatoController {
 	    }
 	}
 	
-
+	@PreAuthorize("hasAuthority('ROLE_client_gestore')")
 	@GetMapping("/gestore/prodotto/{codice}")
     public ResponseEntity<?> getProdotto(@PathVariable("codice") String codice) {
         try {
@@ -449,7 +458,7 @@ public class NegozioAntiquariatoController {
     }
 
 	
-
+	@PreAuthorize("hasAuthority('ROLE_client_gestore')")
 	@PostMapping("/gestore/aggiorna/{codice}")
     public ResponseEntity<?> aggiornaProdotto(
             @PathVariable("codice") String codice, 

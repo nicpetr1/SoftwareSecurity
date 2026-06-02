@@ -57,7 +57,9 @@
           
           <div class="mt-auto">
             <div *ngIf="isGestore" class="d-flex gap-2">
-            <a [href]="'/modifica-prodotto/' + prodotto.codice" class="btn btn-primary w-100">
+            <a [routerLink]="['/modifica-prodotto', prodotto.codice]" class="btn btn-primary w-100">
+              Modifica
+            </a>
               <i class="fa-solid fa-pencil me-2"></i>
               Modifica
             </a>
