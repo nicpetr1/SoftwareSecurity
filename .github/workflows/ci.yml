@@ -51,7 +51,7 @@ jobs:
         cache-dependency-path: './front-end/package-lock.json'
 
     - name: Installa Dipendenze
-      run: npm ci
+      run: npm install
 
     - name: Analisi Statica (Linting)
       run: npm run lint
