@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.server.Ssl;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
-import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerFactory;
+import org.springframework.boot.web.server.ConfigurableWebServerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.vault.authentication.TokenAuthentication;
 import org.springframework.vault.client.VaultEndpoint;
@@ -15,12 +15,12 @@ import java.net.URI;
 import java.util.Map;
 
 @Component
-public class SSLConfig implements WebServerFactoryCustomizer<ConfigurableServletWebServerFactory> {
+public class SSLConfig implements WebServerFactoryCustomizer<ConfigurableWebServerFactory> {
 
     private static final Logger logger = LoggerFactory.getLogger(SSLConfig.class);
 
     @Override
-    public void customize(ConfigurableServletWebServerFactory factory) {
+    public void customize(ConfigurableWebServerFactory factory) {
         logger.info("Configurazione SSL Dinamica avviata...");
 
 
