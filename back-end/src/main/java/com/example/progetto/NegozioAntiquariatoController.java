@@ -444,13 +444,7 @@ public class NegozioAntiquariatoController {
         try {
             Prodotto prodotto = ProdottoDAO.readProdottoByCodice(codice);
 
-            if (prodotto != null) {
-                return ResponseEntity.ok(prodotto);
-            } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(Map.of("error", "Prodotto non trovato con codice: " + codice));
-            }
-
+            return ResponseEntity.ok(prodotto);
         } catch (DAOException | DBConnectionException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Map.of("error", "Errore del server: " + e.getMessage()));

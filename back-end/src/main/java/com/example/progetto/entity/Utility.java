@@ -120,9 +120,10 @@ public class Utility {
  
             if (response == null || response.getData() == null) {
                 System.out.println("Errore");
+				throw new IllegalStateException("Errore");
             }
  
-            Map<String, Object> topLevelData = response.getData();           
+            Map<String, Object> topLevelData = response.getData();          
           
             Map<String, Object> realData = (Map<String, Object>) topLevelData.get("data");
             String base64Key = (String) realData.get("key"); 
@@ -156,6 +157,7 @@ public class Utility {
  
             if (response == null || response.getData() == null) {
                 System.out.println("Errore");
+				throw new IllegalStateException("Errore");
             }
  
             Map<String, Object> topLevelData = response.getData();           
@@ -171,7 +173,7 @@ public class Utility {
     		return cleartext;
  
         } catch (Exception e) {
-            e.getMessage();
+            System.out.println(e.getMessage());
         }
  
 		return "";
