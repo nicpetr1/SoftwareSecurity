@@ -57,7 +57,7 @@ public class Ordine {
 	}
 
 	public ArrayList<Acquisto> getAcquisti() {
-		return acquisti;
+		return new ArrayList<>(this.acquisti);
 	}
 
 	public void setAcquisti(ArrayList<Acquisto> acquisti) {

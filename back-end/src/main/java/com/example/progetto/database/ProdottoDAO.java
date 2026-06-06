@@ -29,7 +29,8 @@ public class ProdottoDAO {
 							Utility.decrypt(result.getBytes("descrizione")), Double.parseDouble(Utility.decrypt(result.getBytes("prezzo"))), Integer.parseInt(Utility.decrypt(result.getBytes("quantita"))));
 					prodotti.add(prodotto);
 				}
-				
+				stmt.close();
+				result.close();
 				return prodotti;
 			}
 			catch (SQLException e) {
@@ -63,6 +64,8 @@ public class ProdottoDAO {
 					prodotto.setPrezzo(Double.parseDouble(Utility.decrypt(result.getBytes("prezzo"))));
 					prodotto.setQuantita(Integer.parseInt(Utility.decrypt(result.getBytes("quantita"))));
 				}
+				stmt.close();
+				result.close();
 				return prodotto;
 			}
 			catch (SQLException e) {
@@ -88,6 +91,7 @@ public class ProdottoDAO {
 				stmt.setBytes(1,Utility.encrypt(String.valueOf(quantita)));
 				stmt.setBytes(2,Utility.encrypt(codice));
 				stmt.executeUpdate();
+				stmt.close();
 			}
 			catch (SQLException e) {
 				throw new DAOException("Errore nell'aggiornamento della quantità del prodotto");
@@ -109,6 +113,7 @@ public class ProdottoDAO {
 				PreparedStatement stmt = conn.prepareStatement(query);
 				stmt.setBytes(1,Utility.encrypt(codice));
 				stmt.executeUpdate();
+				stmt.close();
 			}
 			catch (SQLException e) {
 				throw new DAOException("Errore nell'eliminazione del prodotto");
@@ -135,6 +140,7 @@ public class ProdottoDAO {
 				stmt.setBytes(4,Utility.encrypt(String.valueOf(prodotto.getPrezzo())));
 				stmt.setBytes(5,Utility.encrypt(String.valueOf(prodotto.getQuantita())));
 				stmt.executeUpdate();
+				stmt.close();
 			}
 			catch (SQLException e) {
 				throw new DAOException("Errore nella creazione del prodotto");
@@ -163,7 +169,7 @@ public class ProdottoDAO {
 				stmt.setBytes(5,Utility.encrypt(prodotto.getCodice()));
                 
                 stmt.executeUpdate();
-                
+                stmt.close();
             } catch (SQLException e) {
                 throw new DAOException("Errore nell'aggiornamento del prodotto: " + e.getMessage());
             } finally {

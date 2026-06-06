@@ -24,6 +24,7 @@ public class OrdineDAO {
 				stmt.setBytes(3, Utility.encrypt(String.valueOf(ordine.getPrezzoComplessivo())));
 				stmt.setBytes(4, Utility.encrypt(ordine.getCliente()));
 				stmt.executeUpdate();
+				stmt.close();
 			}
 			catch (SQLException e) {
 				throw new DAOException("Errore nella creazione dell'ordine");

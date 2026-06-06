@@ -1,5 +1,6 @@
 package com.example.progetto.entity;
 
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Base64;
@@ -125,14 +126,14 @@ public class Utility {
           
             Map<String, Object> realData = (Map<String, Object>) topLevelData.get("data");
             String base64Key = (String) realData.get("key"); 
-            byte[] decodedKey = Base64.getDecoder().decode(base64Key.getBytes());         
+            byte[] decodedKey = Base64.getDecoder().decode(base64Key.getBytes(StandardCharsets.UTF_8));         
             // 2. Crea la SecretKey (specificando l'algoritmo, es. "AES")    
             SecretKey key = new SecretKeySpec(decodedKey, "AES");
            // SecretKey key = (SecretKey) realData.get("key");
             
             Cipher cipher = Cipher.getInstance("AES");
     		cipher.init(Cipher.ENCRYPT_MODE, key);
-    		byte[] ciphertext = cipher.doFinal(value.getBytes());
+    		byte[] ciphertext = cipher.doFinal(value.getBytes(StandardCharsets.UTF_8));
     		return ciphertext;
  
         } catch (Exception e) {
@@ -161,7 +162,7 @@ public class Utility {
           
             Map<String, Object> realData = (Map<String, Object>) topLevelData.get("data");
             String base64Key = (String) realData.get("key"); 
-            byte[] decodedKey = Base64.getDecoder().decode(base64Key.getBytes());         
+            byte[] decodedKey = Base64.getDecoder().decode(base64Key.getBytes(StandardCharsets.UTF_8));         
             // 2. Crea la SecretKey (specificando l'algoritmo, es. "AES")    
             SecretKey key = new SecretKeySpec(decodedKey, "AES");
             Cipher cipher = Cipher.getInstance("AES");

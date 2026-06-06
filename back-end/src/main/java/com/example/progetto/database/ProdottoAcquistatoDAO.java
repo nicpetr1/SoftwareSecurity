@@ -30,6 +30,8 @@ public class ProdottoAcquistatoDAO {
 					prodotto.setQuantita(Integer.parseInt(Utility.decrypt(result.getBytes("quantita"))));
 					return prodotto;
 				}
+				result.close();
+				stmt.close();
 				return prodotto;
 			}
 			catch (SQLException e) {
@@ -54,6 +56,7 @@ public class ProdottoAcquistatoDAO {
 				stmt.setBytes(1, Utility.encrypt(String.valueOf(quantita)));
 				stmt.setBytes(2, Utility.encrypt(codice));
 				stmt.executeUpdate();
+				stmt.close();
 			}
 			catch (SQLException e) {
 				throw new DAOException("Errore nell'aggiornamento della quantità del prodotto acquistato");
@@ -80,6 +83,7 @@ public class ProdottoAcquistatoDAO {
 				stmt.setBytes(4, Utility.encrypt(String.valueOf(prodotto.getPrezzo())));
 				stmt.setBytes(5, Utility.encrypt(String.valueOf(prodotto.getQuantita())));
 				stmt.executeUpdate();
+				stmt.close();
 			}
 			catch (SQLException e) {
 				throw new DAOException("Errore nella creazione del prodotto");

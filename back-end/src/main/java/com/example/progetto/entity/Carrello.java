@@ -51,7 +51,7 @@ public class Carrello {
 	}
 
 	public ArrayList<Inserimento> getInserimenti() {
-		return inserimenti;
+		return new ArrayList<>(this.inserimenti);
 	}
 
 	public void setInserimenti(ArrayList<Inserimento> inserimenti) {
@@ -68,7 +68,7 @@ public class Carrello {
 				return null;
 			}
 		}
-		return this.inserimenti;
+		return new ArrayList<>(this.inserimenti);
 	}
 	
 	public int[] checkProdottoInCarrello(String codice) {

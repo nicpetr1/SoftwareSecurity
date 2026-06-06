@@ -26,6 +26,7 @@ public class InserimentoDAO {
 				stmt.setBytes(3, Utility.encrypt(String.valueOf(inserimento.getQuantitaInserita())));
 								
 				stmt.executeUpdate();
+				stmt.close();
 			}
 			catch (SQLException e) {
 				throw new DAOException("Errore nell'inserimento del prodotto nel carrello");
@@ -52,6 +53,8 @@ public class InserimentoDAO {
 							Integer.parseInt(Utility.decrypt(result.getBytes("quantitaInserita"))));
 					inserimenti.add(inserimento);
 				}
+				result.close();
+				stmt.close();
 				return inserimenti;
 			}
 			catch (SQLException e) {
@@ -78,6 +81,8 @@ public class InserimentoDAO {
 							Integer.parseInt(Utility.decrypt(result.getBytes("quantitaInserita"))));
 					inserimenti.add(inserimento);
 				}
+				result.close();
+				stmt.close();
 				return inserimenti;
 			}
 			catch (SQLException e) {
@@ -101,6 +106,7 @@ public class InserimentoDAO {
 				stmt.setBytes(1, Utility.encrypt(cliente));
 				stmt.setBytes(2, Utility.encrypt(prodotto));
 				stmt.executeUpdate();
+				stmt.close();
 			}
 			catch (SQLException e) {
 				throw new DAOException("Errore nella lettura degli inserimenti");
@@ -124,6 +130,7 @@ public class InserimentoDAO {
 				stmt.setBytes(2, Utility.encrypt(cliente));
 				stmt.setBytes(3, Utility.encrypt(prodotto));
 				stmt.executeUpdate();
+				stmt.close();
 			}
 			catch (SQLException e) {
 				throw new DAOException("Errore nell'aggiornamento della quantità inserita");
