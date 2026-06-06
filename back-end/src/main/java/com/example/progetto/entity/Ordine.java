@@ -61,7 +61,7 @@ public class Ordine {
 	}
 
 	public void setAcquisti(ArrayList<Acquisto> acquisti) {
-		this.acquisti = acquisti;
+		this.acquisti = new ArrayList<>(acquisti);
 	}
 	
 	public void salvaOrdine() throws DAOException, DBConnectionException {

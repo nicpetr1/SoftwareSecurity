@@ -24,7 +24,7 @@ public class SSLConfig implements WebServerFactoryCustomizer<ConfigurableWebServ
         logger.info("Configurazione SSL Dinamica avviata...");
 
 
-        if (ProgettoApplication.token == null || ProgettoApplication.token.isEmpty()) {
+        if (ProgettoApplication.getToken() == null || ProgettoApplication.getToken().isEmpty()) {
             throw new IllegalStateException("Impossibile avviare SSL: Token di Vault mancante!");
         }
 
@@ -32,7 +32,7 @@ public class SSLConfig implements WebServerFactoryCustomizer<ConfigurableWebServ
 
             VaultTemplate vaultTemplate = new VaultTemplate(
                 VaultEndpoint.from(URI.create("https://localhost:8200")),
-                new TokenAuthentication(ProgettoApplication.token)
+                new TokenAuthentication(ProgettoApplication.getToken())
             );
 
 

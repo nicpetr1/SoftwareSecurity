@@ -111,7 +111,7 @@ public class Utility {
 		try {
             VaultTemplate vaultTemplate = new VaultTemplate(
                 VaultEndpoint.from("https://localhost:8200"),
-                new TokenAuthentication(ProgettoApplication.token)
+                new TokenAuthentication(ProgettoApplication.getToken())
             );
 
             String path = "secret/data/symmetricKey";
@@ -147,7 +147,7 @@ public class Utility {
 		try {
             VaultTemplate vaultTemplate = new VaultTemplate(
                 VaultEndpoint.from("https://localhost:8200"),
-                new TokenAuthentication(ProgettoApplication.token)
+                new TokenAuthentication(ProgettoApplication.getToken())
             );
 
             String path = "secret/data/symmetricKey";

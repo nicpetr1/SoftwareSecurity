@@ -55,7 +55,7 @@ public class Carrello {
 	}
 
 	public void setInserimenti(ArrayList<Inserimento> inserimenti) {
-		this.inserimenti = inserimenti;
+		this.inserimenti = new ArrayList<>(inserimenti);
 		setDimensione(this.inserimenti.size());
 	}
 	

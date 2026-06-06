@@ -65,12 +65,13 @@ public class Inserimento {
 	// Questo è il metodo che RISOLVE il tuo errore
 	@JsonProperty("prodotto") 
 	public Prodotto getProdotto() {
-		return prodotto;
+		return new Prodotto(prodotto);
 	}
 
 	@JsonProperty("prodotto")
 	public void setProdotto(Prodotto prodotto) {
-		this.prodotto = prodotto;
+		Prodotto prod = new Prodotto(prodotto);
+		this.prodotto = prod;
 	}
 	
 	// --- Metodi DAO (aggiornati per usare 'codiceProdotto') ---

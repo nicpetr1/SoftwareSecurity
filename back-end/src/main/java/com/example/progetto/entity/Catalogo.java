@@ -17,7 +17,7 @@ public class Catalogo {
 	
 	public ArrayList<Prodotto> leggiProdotti() throws DAOException, DBConnectionException{
 		this.prodotti = ProdottoDAO.readProdotti();
-		return prodotti;
+		return new ArrayList<>(this.prodotti);
 	}
 	
 }

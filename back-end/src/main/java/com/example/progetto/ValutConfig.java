@@ -16,7 +16,7 @@ public class ValutConfig extends AbstractVaultConfiguration {
 
 	@Override
 	public ClientAuthentication clientAuthentication() {
-		return new TokenAuthentication(ProgettoApplication.token);
+		return new TokenAuthentication(ProgettoApplication.getToken());
 	}
 	
 }

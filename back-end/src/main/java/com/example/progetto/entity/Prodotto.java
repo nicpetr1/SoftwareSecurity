@@ -39,6 +39,14 @@ public class Prodotto {
 		this.quantita = 0;
 	}
 
+	public Prodotto(Prodotto prodotto) {
+		this.codice = prodotto.codice;
+		this.nome = prodotto.nome;
+		this.descrizione = prodotto.descrizione;
+		this.prezzo = prodotto.prezzo;
+		this.quantita = prodotto.quantita;
+	}
+
 	public String getCodice() {
 		return codice;
 	}
