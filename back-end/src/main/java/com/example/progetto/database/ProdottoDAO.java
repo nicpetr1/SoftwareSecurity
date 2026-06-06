@@ -12,6 +12,7 @@ import com.example.progetto.entity.Utility;
 
 import exception.DAOException;
 import exception.DBConnectionException;
+import exception.ProdottoNonTrovatoException;
 
 public class ProdottoDAO {
 	
@@ -53,46 +54,33 @@ public class ProdottoDAO {
 		}
 	}
 	
-	public static Prodotto readProdottoByCodice(String codice) throws DAOException, DBConnectionException {
-		try {
-			Connection conn = DBManager.getConnection();
-			
-				String query = "SELECT * FROM Prodotti WHERE codice = ?";
-				try(PreparedStatement stmt = conn.prepareStatement(query)){
-				stmt.setBytes(1,Utility.encrypt(codice));
-				try(ResultSet result = stmt.executeQuery()){
-				Prodotto prodotto = new Prodotto();
-				
-				if(result.next()) {
-					prodotto.setCodice(codice);
-					prodotto.setNome(Utility.decrypt(result.getBytes("nome")));
-					prodotto.setDescrizione(Utility.decrypt(result.getBytes("descrizione")));
-					prodotto.setPrezzo(Double.parseDouble(Utility.decrypt(result.getBytes("prezzo"))));
-					prodotto.setQuantita(Integer.parseInt(Utility.decrypt(result.getBytes("quantita"))));
-				}
-				return prodotto;
-			}
-			catch (SQLException e) {
-				throw new DAOException("Errore nella lettura del prodotto");
-			}
-			
-			finally {
-				DBManager.closeConnection();
-			}
-			}
-			catch (SQLException e) {
-				throw new DAOException("Errore nella lettura del prodotto");
-			}
-			
-			finally {
-				DBManager.closeConnection();
-			}
-			
-		} 
-		catch (SQLException e) {
-			throw new DBConnectionException("Errore nella connessione con la base di dati");
-		}
-	}
+public static Prodotto readProdottoByCodice(String codice) throws DAOException, DBConnectionException {
+
+    String query = "SELECT * FROM Prodotti WHERE codice = ?";
+    try (Connection conn = DBManager.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(query)) {
+        
+        stmt.setBytes(1, Utility.encrypt(codice));
+        
+        try (ResultSet result = stmt.executeQuery()) {
+            if (result.next()) {
+                Prodotto prodotto = new Prodotto();
+                prodotto.setCodice(codice);
+                prodotto.setNome(Utility.decrypt(result.getBytes("nome")));
+                prodotto.setDescrizione(Utility.decrypt(result.getBytes("descrizione")));
+                prodotto.setPrezzo(Double.parseDouble(Utility.decrypt(result.getBytes("prezzo"))));
+                prodotto.setQuantita(Integer.parseInt(Utility.decrypt(result.getBytes("quantita"))));
+                
+                return prodotto;
+            } else {
+                throw new ProdottoNonTrovatoException("Nessun prodotto trovato con codice: " + codice);
+            }
+        }
+        
+    } catch (SQLException e) {
+        throw new DAOException("Errore nella lettura del prodotto: " + e.getMessage());
+    }
+}
 	
 	public static void updateQuantita(String codice, int quantita) throws DAOException, DBConnectionException {
 		try {

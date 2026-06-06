@@ -467,11 +467,6 @@ public class NegozioAntiquariatoController {
         try {
 
             Prodotto prodottoEsistente = ProdottoDAO.readProdottoByCodice(codice);
-            
-            if (prodottoEsistente == null) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(Map.of("error", "Impossibile aggiornare: Prodotto non trovato"));
-            }
 
             // 2. Estrazione dati dal payload
             String nome = (String) payload.get("nome");
