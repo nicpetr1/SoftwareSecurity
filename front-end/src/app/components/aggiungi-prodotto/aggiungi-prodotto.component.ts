@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { ProdottiService } from '../../services/prodotti.service';
 import { FormInserimento } from '../../interfaces/formInserimento';
@@ -14,6 +14,7 @@ import { FormsModule } from '@angular/forms';
 export class AggiungiProdottoComponent {
   private prodottiService = inject(ProdottiService);
   private router = inject(Router);
+  private cdr = inject(ChangeDetectorRef);
 
 
   formModel: FormInserimento = {
@@ -36,8 +37,8 @@ export class AggiungiProdottoComponent {
       next: (prodottoCreato) => {
         console.log('Prodotto creato con successo:', prodottoCreato);
         this.isLoading = false;
-        
         this.router.navigate(['']); 
+        this.cdr.detectChanges();
       },
       error: (err) => {
         console.error('Errore creazione prodotto:', err);

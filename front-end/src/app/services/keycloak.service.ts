@@ -27,8 +27,6 @@ export class KeycloakService {
     return this._profile;
   }
 
-  constructor() { }
-
     async init(){
         const authentecated = await this.keycloak?.init({
             onLoad: 'login-required'

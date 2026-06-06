@@ -23,10 +23,10 @@
             <form (ngSubmit)="onSubmit()" #editForm="ngForm">
 
               <div class="mb-4">
-                <label class="form-label text-muted">
+                <label for="codice-prodotto" class="form-label text-muted">
                   <i class="fa-solid fa-barcode input-icon me-2"></i>Codice Prodotto
                 </label>
-                <input type="text" class="form-control bg-light"
+                <input id="codice-prodotto" type="text" class="form-control bg-light"
                   [value]="codiceProdotto" readonly disabled>
                 </div>
 

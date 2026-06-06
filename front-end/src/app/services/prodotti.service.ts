@@ -17,12 +17,6 @@ export class ProdottiService {
 
   private prodottiUrl = 'https://localhost/api';
 
-  /** Inserted by Angular inject() migration for backwards compatibility */
-  constructor(...args: unknown[]);
-
-  constructor() {
-  }
-
 
   private httpOptions = {
     headers: new HttpHeaders(),

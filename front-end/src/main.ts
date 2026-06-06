@@ -1,6 +1,4 @@
-import { provideZoneChangeDetection, APP_INITIALIZER, importProvidersFrom } from "@angular/core";
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-
+import { APP_INITIALIZER, importProvidersFrom } from "@angular/core";
 import { kcFactory } from './app/app.module';
 import { KeycloakService } from "./app/services/keycloak.service";
 import { provideHttpClient, withInterceptorsFromDi } from "@angular/common/http";

@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { CarrelloService } from '../../services/carrello.service';
 import Swal from 'sweetalert2'
@@ -13,6 +13,7 @@ import { CurrencyPipe } from '@angular/common';
 export class CarrelloComponent implements OnInit {
   private carrelloService = inject(CarrelloService);
   private router = inject(Router);
+  private cdr = inject(ChangeDetectorRef);
 
 
   public items: any[] = [];
@@ -32,16 +33,18 @@ export class CarrelloComponent implements OnInit {
       this.items = data;
       this.calcolaTotale();
       this.isLoading = false;
+      this.cdr.detectChanges();
     });
   }
 
   rimuoviDalCarrello(item: any): void {
     // Assumendo che il codice sia in 'item.prodotto.codice'
     this.carrelloService.rimuovi(item.prodotto.codice).subscribe({
-      next: (response: any) => {
+      next: () => {
         this.caricaCarrello();
-       },
-      error: (err) => {
+        this.cdr.detectChanges();
+      },
+      error: () => {
         alert('Errore: impossibile rimuovere il prodotto.');
       }
     });

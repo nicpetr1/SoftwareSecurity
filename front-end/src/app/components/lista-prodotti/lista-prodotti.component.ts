@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject,ChangeDetectorRef  } from '@angular/core';
 import { Prodotto } from '../../interfaces/prodotto'
 import { ProdottiService } from 'src/app/services/prodotti.service';
 import { Router, RouterLink } from '@angular/router';
@@ -18,6 +18,7 @@ export class ListaProdottiComponent implements OnInit{
   private keycloakService = inject(KeycloakService);
   private router = inject(Router);
   private carrelloService = inject(CarrelloService);
+  private cdr = inject(ChangeDetectorRef);
 
 
   prodotti: Prodotto[] = [];
@@ -28,9 +29,8 @@ export class ListaProdottiComponent implements OnInit{
 
   public feedback: string | null = null;
   public feedbackType: 'success' | 'error' = 'success';
-  private toastTimer: any = null;
+  private toastTimer: any = null;
 
-  constructor() {}
 
   fileChangeEvent(fileInput: any, prodotto: Prodotto) {
     
@@ -59,10 +59,12 @@ export class ListaProdottiComponent implements OnInit{
           this.prodotti = data.filter(prodotto => prodotto.quantita > 0);
           this.isLoading = false;
           console.log('Prodotti loaded:', this.prodotti);
+          this.cdr.detectChanges();
         },
         error: () => {
           this.error = 'Failed to load products.';
           this.isLoading = false;
+          this.cdr.detectChanges();
         },
       });
     }
@@ -74,10 +76,12 @@ export class ListaProdottiComponent implements OnInit{
           this.prodotti = data;
           this.isLoading = false;
           console.log('Prodotti loaded:', this.prodotti);
+          this.cdr.detectChanges();
         },
         error: () => {
           this.error = 'Failed to load products.';
           this.isLoading = false;
+          this.cdr.detectChanges();
         },
       });
     }
@@ -110,6 +114,7 @@ public aggiungiAlCarrello(prodotto: Prodotto): void {
         prodotto.quantita -= 1; 
 
         this.setFeedback('Prodotto aggiunto al carrello!', 'success');
+        this.cdr.detectChanges();
 
       } else {
         this.setFeedback('Errore: impossibile aggiungere il prodotto.', 'error');
@@ -135,8 +140,9 @@ rimuoviProdotto(codice: string) {
       if (result.isConfirmed) {
         
         this.prodottiService.eliminaProdotto(codice).subscribe({
-          next: (response) => {
+          next: () => {
             this.prodotti = this.prodotti.filter(p => p.codice !== codice);
+            this.cdr.detectChanges();
             
             Swal.fire(
               'Eliminato!',
@@ -153,7 +159,6 @@ rimuoviProdotto(codice: string) {
             );
           }
         });
-
       }
     });
   }

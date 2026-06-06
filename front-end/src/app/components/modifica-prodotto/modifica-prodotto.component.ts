@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectorRef} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProdottiService } from '../../services/prodotti.service';
 import { Prodotto } from '../../interfaces/prodotto';
@@ -15,7 +15,7 @@ export class ModificaProdottoComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private prodottiService = inject(ProdottiService);
-
+  private cdr = inject(ChangeDetectorRef);
 
   codiceProdotto = '';
   public feedback: string | null = null;
@@ -32,11 +32,6 @@ export class ModificaProdottoComponent implements OnInit {
   isLoading = false;
   isError = false;
   message = '';
-
-  /** Inserted by Angular inject() migration for backwards compatibility */
-  constructor(...args: unknown[]);
-
-  constructor() {}
 
   ngOnInit(): void {
 
@@ -60,10 +55,12 @@ export class ModificaProdottoComponent implements OnInit {
           quantita: data.quantita
         };
         this.isLoading = false;
+        this.cdr.detectChanges();
       },
-      error: (err) => {
+      error: () => {
         this.setFeedback('Impossibile recuperare i dati del prodotto.', 'error');
         this.isLoading = false;
+        this.cdr.detectChanges();
       }
     });
   }
@@ -84,12 +81,14 @@ onSubmit() {
           showConfirmButton: false
         }).then(() => {
           this.router.navigate(['']); 
+          this.cdr.detectChanges();
         });
 
       },
       error: (err) => {
         console.error('Errore update:', err);
         this.isLoading = false;
+        this.cdr.detectChanges();
         
         const msg = err.error?.error || err.error?.message || "Errore durante l'aggiornamento.";
         
