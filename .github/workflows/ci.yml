@@ -26,7 +26,7 @@ jobs:
       uses: actions/setup-java@v4
       with:
         java-version: '17'
-        distribution: 'Oracle JDK 17'
+        distribution: 'Oracle'
         cache: maven # Velocizza le build future salvando in cache le dipendenze
 
   # ==========================================
