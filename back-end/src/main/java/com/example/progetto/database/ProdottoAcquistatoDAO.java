@@ -16,23 +16,28 @@ public class ProdottoAcquistatoDAO {
 	public static Prodotto readProdottoAcquistato(String codice) throws DAOException, DBConnectionException {
 		try {
 			Connection conn = DBManager.getConnection();
-			try {
+			
 				String query = "SELECT * FROM ProdottiAcquistati WHERE codice = ?";
-				PreparedStatement stmt = conn.prepareStatement(query);
+				try(PreparedStatement stmt = conn.prepareStatement(query)){
 				stmt.setBytes(1, Utility.encrypt(codice));
-				ResultSet result = stmt.executeQuery();
+				try(ResultSet result = stmt.executeQuery()){
 				Prodotto prodotto = new Prodotto();
 				if(result.next()) {
 					prodotto.setCodice(Utility.decrypt(result.getBytes("codice")));
 					prodotto.setNome(Utility.decrypt(result.getBytes("nome")));
 					prodotto.setDescrizione(Utility.decrypt(result.getBytes("descrizione")));
 					prodotto.setPrezzo(Double.parseDouble(Utility.decrypt(result.getBytes("prezzo"))));
-					prodotto.setQuantita(Integer.parseInt(Utility.decrypt(result.getBytes("quantita"))));
-					return prodotto;
+					prodotto.setQuantita(Integer.parseInt(Utility.decrypt(result.getBytes("quantita"))));	
 				}
-				result.close();
-				stmt.close();
 				return prodotto;
+				}
+				catch (SQLException e) {
+					throw new DAOException("Errore nella lettura del prodotto acquistato");
+				}
+				finally {
+					DBManager.closeConnection();
+				}
+				
 			}
 			catch (SQLException e) {
 				throw new DAOException("Errore nella lettura del prodotto acquistato");
@@ -50,9 +55,9 @@ public class ProdottoAcquistatoDAO {
 	public static void updateQuantitaAcquistata(String codice, int quantita) throws DAOException, DBConnectionException {
 		try {
 			Connection conn = DBManager.getConnection();
-			try {
+		
 				String query = "UPDATE ProdottiAcquistati SET quantita = ? WHERE codice = ?";
-				PreparedStatement stmt = conn.prepareStatement(query);
+				try(PreparedStatement stmt = conn.prepareStatement(query)){
 				stmt.setBytes(1, Utility.encrypt(String.valueOf(quantita)));
 				stmt.setBytes(2, Utility.encrypt(codice));
 				stmt.executeUpdate();
@@ -73,10 +78,10 @@ public class ProdottoAcquistatoDAO {
 	public static void createProdottoAcquistato(Prodotto prodotto) throws DAOException, DBConnectionException{
 		try {
 			Connection conn = DBManager.getConnection();
-			try {
+	
 				String query = "INSERT INTO ProdottiAcquistati (codice, nome, descrizione, prezzo, quantita) "
 						+ "VALUES (?, ?, ?, ?, ?)";
-				PreparedStatement stmt = conn.prepareStatement(query);
+				try(PreparedStatement stmt = conn.prepareStatement(query)){
 				stmt.setBytes(1, Utility.encrypt(prodotto.getCodice()));
 				stmt.setBytes(2, Utility.encrypt(prodotto.getNome()));
 				stmt.setBytes(3, Utility.encrypt(prodotto.getDescrizione()));

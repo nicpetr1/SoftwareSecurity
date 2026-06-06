@@ -19,29 +19,35 @@ public class ProdottoDAO {
 	public static ArrayList<Prodotto> readProdotti() throws DAOException, DBConnectionException{
 		try {
 			Connection conn = DBManager.getConnection();
-			try {
+		
 				String query = "SELECT * FROM Prodotti";
-				PreparedStatement stmt = conn.prepareStatement(query);
-				ResultSet result = stmt.executeQuery();
-				ArrayList<Prodotto> prodotti = new ArrayList<Prodotto>();
-				while(result.next()) {
-					Prodotto prodotto = new Prodotto(Utility.decrypt(result.getBytes("codice")), Utility.decrypt(result.getBytes("nome")),
-							Utility.decrypt(result.getBytes("descrizione")), Double.parseDouble(Utility.decrypt(result.getBytes("prezzo"))), Integer.parseInt(Utility.decrypt(result.getBytes("quantita"))));
-					prodotti.add(prodotto);
+				try(PreparedStatement stmt = conn.prepareStatement(query)){
+					try(ResultSet result = stmt.executeQuery()){
+						ArrayList<Prodotto> prodotti = new ArrayList<Prodotto>();
+						while(result.next()) {
+							Prodotto prodotto = new Prodotto(Utility.decrypt(result.getBytes("codice")), Utility.decrypt(result.getBytes("nome")),
+									Utility.decrypt(result.getBytes("descrizione")), Double.parseDouble(Utility.decrypt(result.getBytes("prezzo"))), Integer.parseInt(Utility.decrypt(result.getBytes("quantita"))));
+							prodotti.add(prodotto);
+						}
+						return prodotti;
+					}
+					catch (SQLException e) {
+						throw new DAOException("Errore nella lettura dei prodotti");
+					}
+
+					finally {
+						DBManager.closeConnection();
+					}
 				}
-				stmt.close();
-				result.close();
-				return prodotti;
+				catch (SQLException e) {
+					throw new DAOException("Errore nella lettura dei prodotti");
+				}
+
+				finally {
+					DBManager.closeConnection();
+				}		
 			}
-			catch (SQLException e) {
-				throw new DAOException("Errore nella lettura dei prodotti");
-			}
-			
-			finally {
-				DBManager.closeConnection();
-			}
-			
-		} 
+
 		catch (SQLException e) {
 			throw new DBConnectionException("Errore nella connessione con la base di dati");
 		}
@@ -50,11 +56,11 @@ public class ProdottoDAO {
 	public static Prodotto readProdottoByCodice(String codice) throws DAOException, DBConnectionException {
 		try {
 			Connection conn = DBManager.getConnection();
-			try {
+			
 				String query = "SELECT * FROM Prodotti WHERE codice = ?";
-				PreparedStatement stmt = conn.prepareStatement(query);
+				try(PreparedStatement stmt = conn.prepareStatement(query)){
 				stmt.setBytes(1,Utility.encrypt(codice));
-				ResultSet result = stmt.executeQuery();
+				try(ResultSet result = stmt.executeQuery()){
 				Prodotto prodotto = new Prodotto();
 				
 				if(result.next()) {
@@ -64,9 +70,15 @@ public class ProdottoDAO {
 					prodotto.setPrezzo(Double.parseDouble(Utility.decrypt(result.getBytes("prezzo"))));
 					prodotto.setQuantita(Integer.parseInt(Utility.decrypt(result.getBytes("quantita"))));
 				}
-				stmt.close();
-				result.close();
 				return prodotto;
+			}
+			catch (SQLException e) {
+				throw new DAOException("Errore nella lettura del prodotto");
+			}
+			
+			finally {
+				DBManager.closeConnection();
+			}
 			}
 			catch (SQLException e) {
 				throw new DAOException("Errore nella lettura del prodotto");
@@ -85,13 +97,12 @@ public class ProdottoDAO {
 	public static void updateQuantita(String codice, int quantita) throws DAOException, DBConnectionException {
 		try {
 			Connection conn = DBManager.getConnection();
-			try {
+	
 				String query = "UPDATE Prodotti SET quantita = ? WHERE codice = ?";
-				PreparedStatement stmt = conn.prepareStatement(query);
+				try(PreparedStatement stmt = conn.prepareStatement(query)){
 				stmt.setBytes(1,Utility.encrypt(String.valueOf(quantita)));
 				stmt.setBytes(2,Utility.encrypt(codice));
 				stmt.executeUpdate();
-				stmt.close();
 			}
 			catch (SQLException e) {
 				throw new DAOException("Errore nell'aggiornamento della quantità del prodotto");
@@ -108,12 +119,11 @@ public class ProdottoDAO {
 	public static void deleteProdottoByCodice(String codice) throws DAOException, DBConnectionException {
 		try {
 			Connection conn = DBManager.getConnection();
-			try {
+			
 				String query = "DELETE FROM Prodotti WHERE codice = ?";
-				PreparedStatement stmt = conn.prepareStatement(query);
+				try(PreparedStatement stmt = conn.prepareStatement(query)){
 				stmt.setBytes(1,Utility.encrypt(codice));
 				stmt.executeUpdate();
-				stmt.close();
 			}
 			catch (SQLException e) {
 				throw new DAOException("Errore nell'eliminazione del prodotto");
@@ -130,24 +140,25 @@ public class ProdottoDAO {
 	public static void createProdotto(Prodotto prodotto) throws DAOException, DBConnectionException {
 		try {
 			Connection conn = DBManager.getConnection();
-			try {
+			
 				String query = "INSERT INTO Prodotti (codice, nome, descrizione, prezzo, quantita) "
 						+ "VALUES (?, ?, ?, ?, ?)";
-				PreparedStatement stmt = conn.prepareStatement(query);
-				stmt.setBytes(1,Utility.encrypt(prodotto.getCodice()));
-				stmt.setBytes(2,Utility.encrypt(prodotto.getNome()));
-				stmt.setBytes(3,Utility.encrypt(prodotto.getDescrizione()));
-				stmt.setBytes(4,Utility.encrypt(String.valueOf(prodotto.getPrezzo())));
-				stmt.setBytes(5,Utility.encrypt(String.valueOf(prodotto.getQuantita())));
-				stmt.executeUpdate();
-				stmt.close();
-			}
-			catch (SQLException e) {
-				throw new DAOException("Errore nella creazione del prodotto");
-			}
-			finally {
-				DBManager.closeConnection();
-			}
+				try(PreparedStatement stmt = conn.prepareStatement(query)){
+					stmt.setBytes(1,Utility.encrypt(prodotto.getCodice()));
+					stmt.setBytes(2,Utility.encrypt(prodotto.getNome()));
+					stmt.setBytes(3,Utility.encrypt(prodotto.getDescrizione()));
+					stmt.setBytes(4,Utility.encrypt(String.valueOf(prodotto.getPrezzo())));
+					stmt.setBytes(5,Utility.encrypt(String.valueOf(prodotto.getQuantita())));
+					stmt.executeUpdate();
+				}
+
+				catch (SQLException e) {
+					throw new DAOException("Errore nella creazione del prodotto");
+				}
+
+				finally {
+					DBManager.closeConnection();
+				}
 		} 
 		catch (SQLException e) {
 			throw new DBConnectionException("Errore nella connessione con la base di dati");
@@ -157,11 +168,11 @@ public class ProdottoDAO {
     public static void updateProdotto(Prodotto prodotto) throws DAOException, DBConnectionException {
         try {
             Connection conn = DBManager.getConnection();
-            try {
+            
                 // Query che aggiorna tutti i campi basandosi sulla chiave primaria (codice)
                 String query = "UPDATE prodotti SET nome = ?, descrizione = ?, prezzo = ?, quantita = ? WHERE codice = ?";
                 
-                PreparedStatement stmt = conn.prepareStatement(query);
+                try(PreparedStatement stmt = conn.prepareStatement(query)){
 				stmt.setBytes(1,Utility.encrypt(prodotto.getNome()));
 				stmt.setBytes(2,Utility.encrypt(prodotto.getDescrizione()));
 				stmt.setBytes(3,Utility.encrypt(String.valueOf(prodotto.getPrezzo())));
@@ -169,7 +180,6 @@ public class ProdottoDAO {
 				stmt.setBytes(5,Utility.encrypt(prodotto.getCodice()));
                 
                 stmt.executeUpdate();
-                stmt.close();
             } catch (SQLException e) {
                 throw new DAOException("Errore nell'aggiornamento del prodotto: " + e.getMessage());
             } finally {
