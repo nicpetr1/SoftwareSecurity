@@ -1,34 +1,38 @@
 <nav class="navbar navbar-dark py-2 navbar-custom-antique">
   <div class="container-fluid d-flex flex-column">
-    
+
     <a class="navbar-brand fs-4 mb-2 align-self-center" href="#">
       <i class="fa-solid fa-store me-2"></i> Negozio di Antiquariato
     </a>
 
     <div class="header-right align-self-end">
       <div style="display: flex; align-items: center; gap: 1rem;">
-        
+
         <div class="d-flex align-items-center gap-2">
-          
+
           <span class="navbar-text text-white me-2">
             Bentornato, {{ getUserName() }}
           </span>
 
-          <div *ngIf="isGestore" class="d-flex gap-2">
-            <a routerLink="/aggiungi-prodotto" class="btn btn-outline-light btn-sm">
+          @if (isGestore) {
+            <div class="d-flex gap-2">
+              <a routerLink="/aggiungi-prodotto" class="btn btn-outline-light btn-sm">
                 <i class="fa-solid fa-plus me-1"></i> Aggiungi Prodotto
-            </a>
-          </div>
-          
-          <div *ngIf="isCliente" class="d-flex gap-2">
-            <a routerLink="/carrello" class="btn btn-outline-light btn-sm">
-              <i class="fa-solid fa-cart-shopping me-1"></i> Carrello
-            </a>
-          </div>
+              </a>
+            </div>
+          }
+
+          @if (isCliente) {
+            <div class="d-flex gap-2">
+              <a routerLink="/carrello" class="btn btn-outline-light btn-sm">
+                <i class="fa-solid fa-cart-shopping me-1"></i> Carrello
+              </a>
+            </div>
+          }
           <button (click)="logout()" class="btn btn-outline-light btn-sm">
             <i class="fa-solid fa-sign-out-alt me-1"></i> Logout
           </button>
-          
+
           <div class="admin-actions">
           </div>
 
@@ -41,68 +45,77 @@
 <div class="container mt-4">
   <div class="row">
 
-    <div *ngFor="let prodotto of prodotti" class="col-12 col-md-6 col-lg-4 mb-4">
-      
-      <div class="card h-100 product-card">
-        
-        <div class="card-body d-flex flex-column">
-          
-          <h5 class="card-title">{{ prodotto.nome }}</h5>
-          <p class="card-text">{{ prodotto.descrizione }}</p>
-          <p *ngIf="isGestore" class="card-text">Codice: {{ prodotto.codice }}</p>
-          <p *ngIf="isGestore" class="card-text">Quantità: {{ prodotto.quantita }}</p>
-          <h6 class="card-subtitle mb-2 text-muted">
-            {{ prodotto.prezzo | currency:'EUR':'symbol' }}
-          </h6>
-          
-          <div class="mt-auto">
-            <div *ngIf="isGestore" class="d-flex gap-2">
-            <a [routerLink]="['/modifica-prodotto', prodotto.codice]" class="btn btn-primary w-100">
-              <i class="fa-solid fa-pencil me-2"></i>
-              Modifica
-            </a>
-            <button (click)="rimuoviProdotto(prodotto.codice)" class="btn btn-danger w-100">
-              <i class="fa-solid fa-trash me-2"></i>
-              Rimuovi
-            </button>
-          </div>
-            <button *ngIf="isCliente" (click)="aggiungiAlCarrello(prodotto)" class="btn btn-success w-100 mt-2">
-              <i class="fa-solid fa-cart-plus me-2"></i>
-              Aggiungi al carrello
-            </button>
-            
-            <!--
-            <button 
-              *ngIf="isLoggedIn()" 
-              (click)="aggiungiAlCarrello(prodotto)" 
-              class="btn btn-success w-100 mt-2">
-              <i class="fa-solid fa-cart-plus me-2"></i>
-              Aggiungi al carrello
-            </button>
-          -->  
+    @for (prodotto of prodotti; track prodotto) {
+      <div class="col-12 col-md-6 col-lg-4 mb-4">
+        <div class="card h-100 product-card">
+          <div class="card-body d-flex flex-column">
+            <h5 class="card-title">{{ prodotto.nome }}</h5>
+            <p class="card-text">{{ prodotto.descrizione }}</p>
+            @if (isGestore) {
+              <p class="card-text">Codice: {{ prodotto.codice }}</p>
+            }
+            @if (isGestore) {
+              <p class="card-text">Quantità: {{ prodotto.quantita }}</p>
+            }
+            <h6 class="card-subtitle mb-2 text-muted">
+              {{ prodotto.prezzo | currency:'EUR':'symbol' }}
+            </h6>
+            <div class="mt-auto">
+              @if (isGestore) {
+                <div class="d-flex gap-2">
+                  <a [routerLink]="['/modifica-prodotto', prodotto.codice]" class="btn btn-primary w-100">
+                    <i class="fa-solid fa-pencil me-2"></i>
+                    Modifica
+                  </a>
+                  <button (click)="rimuoviProdotto(prodotto.codice)" class="btn btn-danger w-100">
+                    <i class="fa-solid fa-trash me-2"></i>
+                    Rimuovi
+                  </button>
+                </div>
+              }
+              @if (isCliente) {
+                <button (click)="aggiungiAlCarrello(prodotto)" class="btn btn-success w-100 mt-2">
+                  <i class="fa-solid fa-cart-plus me-2"></i>
+                  Aggiungi al carrello
+                </button>
+              }
+              <!--
+              <button
+                *ngIf="isLoggedIn()"
+                (click)="aggiungiAlCarrello(prodotto)"
+                class="btn btn-success w-100 mt-2">
+                <i class="fa-solid fa-cart-plus me-2"></i>
+                Aggiungi al carrello
+              </button>
+              -->
+            </div>
           </div>
         </div>
-
       </div>
-    </div>
-    <div *ngIf="prodotti.length === 0" class="col-12 text-center">
-      <p>Nessun prodotto da visualizzare al momento.</p>
-    </div>
+    }
+    @if (prodotti.length === 0) {
+      <div class="col-12 text-center">
+        <p>Nessun prodotto da visualizzare al momento.</p>
+      </div>
+    }
   </div>
 </div>
 
-<div *ngIf="feedback" 
-     class="feedback-toast shadow-lg"
+@if (feedback) {
+  <div
+    class="feedback-toast shadow-lg"
      [ngClass]="{ 
        'toast-success': feedbackType === 'success', 
        'toast-error': feedbackType === 'error' 
      }">
-  
-  <i *ngIf="feedbackType === 'success'" class="fa-solid fa-circle-check me-2"></i>
-  <i *ngIf="feedbackType === 'error'" class="fa-solid fa-circle-exclamation me-2"></i>
-  
-  <span>{{ feedback }}</span>
-  
-  <button (click)="clearFeedback()" class="btn-close-toast">&times;</button>
-</div>
+    @if (feedbackType === 'success') {
+      <i class="fa-solid fa-circle-check me-2"></i>
+    }
+    @if (feedbackType === 'error') {
+      <i class="fa-solid fa-circle-exclamation me-2"></i>
+    }
+    <span>{{ feedback }}</span>
+    <button (click)="clearFeedback()" class="btn-close-toast">&times;</button>
+  </div>
+}
 <div class="container mt-4">
