@@ -20,13 +20,19 @@ public class InserimentoDAO {
 			Connection conn = DBManager.getConnection();
 			try {
 				String query = "INSERT INTO Inserimenti(cliente, prodotto, quantitaInserita) VALUES (?, ?, ?)";
-				PreparedStatement stmt = conn.prepareStatement(query);
-				stmt.setBytes(1, Utility.encrypt(inserimento.getCliente()));
-				stmt.setBytes(2, Utility.encrypt(inserimento.getCodiceProdotto()));
-				stmt.setBytes(3, Utility.encrypt(String.valueOf(inserimento.getQuantitaInserita())));
-								
-				stmt.executeUpdate();
-				stmt.close();
+				try(PreparedStatement stmt = conn.prepareStatement(query)){
+					stmt.setBytes(1, Utility.encrypt(inserimento.getCliente()));
+					stmt.setBytes(2, Utility.encrypt(inserimento.getCodiceProdotto()));
+					stmt.setBytes(3, Utility.encrypt(String.valueOf(inserimento.getQuantitaInserita())));
+					
+					stmt.executeUpdate();
+				}
+				catch (SQLException e) {
+					throw new DAOException("Errore nell'inserimento del prodotto nel carrello");
+				}
+				finally {
+					DBManager.closeConnection();
+				}
 			}
 			catch (SQLException e) {
 				throw new DAOException("Errore nell'inserimento del prodotto nel carrello");
@@ -40,58 +46,72 @@ public class InserimentoDAO {
 	public static ArrayList<Inserimento> readInserimentiByUsername(String username) throws DAOException, DBConnectionException{
 		try {
 			Connection conn = DBManager.getConnection();
-			try {
-				String query = "SELECT prodotto, quantitaInserita FROM Inserimenti WHERE cliente = ?";
-				PreparedStatement stmt = conn.prepareStatement(query);
+			String query = "SELECT prodotto, quantitaInserita FROM Inserimenti WHERE cliente = ?";
+			try(PreparedStatement stmt = conn.prepareStatement(query)){
 				stmt.setBytes(1, Utility.encrypt(username));
-				ResultSet result = stmt.executeQuery();
-				ArrayList<Inserimento> inserimenti = new ArrayList<Inserimento>();
-				while(result.next()) {
-					Inserimento inserimento = new Inserimento(
+				try(ResultSet result = stmt.executeQuery()){
+					ArrayList<Inserimento> inserimenti = new ArrayList<Inserimento>();
+					while(result.next()) {
+						Inserimento inserimento = new Inserimento(
 							username, 
 							Utility.decrypt(result.getBytes("prodotto")), 
-							Integer.parseInt(Utility.decrypt(result.getBytes("quantitaInserita"))));
-					inserimenti.add(inserimento);
+						Integer.parseInt(Utility.decrypt(result.getBytes("quantitaInserita"))));
+						inserimenti.add(inserimento);
+					}
+					return inserimenti;
 				}
-				result.close();
-				stmt.close();
-				return inserimenti;
+				catch (SQLException e) {
+					throw new DAOException("Errore nella lettura degli inserimenti dell'utente");
+				}
+				finally {
+					DBManager.closeConnection();
+				}
 			}
 			catch (SQLException e) {
 				throw new DAOException("Errore nella lettura degli inserimenti dell'utente");
 			}
-		} 
+			finally {
+				DBManager.closeConnection();
+			}
+		}
 		catch (SQLException e) {
-			throw new DBConnectionException("Errore nella connessione con la base di dati");
+				throw new DBConnectionException("Errore nella connessione con la base di dati");
 		}
 	}
 
 	public static ArrayList<Inserimento> readInserimenti() throws DAOException, DBConnectionException {
 		try {
 			Connection conn = DBManager.getConnection();
-			try {
-				String query = "SELECT * FROM Inserimenti";
-				Statement stmt = conn.createStatement();
+			String query = "SELECT * FROM Inserimenti";
+			try(Statement stmt = conn.createStatement()) {
 				ArrayList<Inserimento> inserimenti = new ArrayList<Inserimento>();
-				ResultSet result = stmt.executeQuery(query);
-				while(result.next()) {
-					Inserimento inserimento = new Inserimento(
+				try(ResultSet result = stmt.executeQuery(query)) {
+					while(result.next()) {
+						Inserimento inserimento = new Inserimento(
 							Utility.decrypt(result.getBytes("cliente")),
 							Utility.decrypt(result.getBytes("prodotto")),
-							Integer.parseInt(Utility.decrypt(result.getBytes("quantitaInserita"))));
-					inserimenti.add(inserimento);
+							Integer.parseInt(Utility.decrypt(result.getBytes("quantitaInserita")))
+						);
+						inserimenti.add(inserimento);
+					}
+					result.close();
+					stmt.close();
+					return inserimenti;
 				}
-				result.close();
-				stmt.close();
-				return inserimenti;
-			}
+				catch (SQLException e) {
+					throw new DAOException("Errore nella lettura degli inserimenti");
+				}
+				finally {
+					DBManager.closeConnection();
+				}
+			}			
 			catch (SQLException e) {
 				throw new DAOException("Errore nella lettura degli inserimenti");
 			}
 			finally {
 				DBManager.closeConnection();
 			}
-		} 
+		}
 		catch (SQLException e) {
 			throw new DBConnectionException("Errore nella connessione con la base di dati");
 		}
@@ -100,13 +120,11 @@ public class InserimentoDAO {
 	public static void deleteInserimento(String cliente, String prodotto) throws DAOException, DBConnectionException {
 		try {
 			Connection conn = DBManager.getConnection();
-			try {
-				String query = "DELETE FROM Inserimenti WHERE cliente = ? AND prodotto = ?";
-				PreparedStatement stmt = conn.prepareStatement(query);
+			String query = "DELETE FROM Inserimenti WHERE cliente = ? AND prodotto = ?";
+			try(PreparedStatement stmt = conn.prepareStatement(query)){
 				stmt.setBytes(1, Utility.encrypt(cliente));
 				stmt.setBytes(2, Utility.encrypt(prodotto));
 				stmt.executeUpdate();
-				stmt.close();
 			}
 			catch (SQLException e) {
 				throw new DAOException("Errore nella lettura degli inserimenti");
@@ -123,14 +141,12 @@ public class InserimentoDAO {
 	public static void updateQuantitaInserita(String cliente, String prodotto, int quantitaInserita) throws DAOException, DBConnectionException {
 		try {
 			Connection conn = DBManager.getConnection();
-			try {
-				String query = "UPDATE Inserimenti SET quantitaInserita = ? WHERE cliente = ? AND prodotto = ?";
-				PreparedStatement stmt = conn.prepareStatement(query);
+			String query = "UPDATE Inserimenti SET quantitaInserita = ? WHERE cliente = ? AND prodotto = ?";
+			try(PreparedStatement stmt = conn.prepareStatement(query)){
 				stmt.setBytes(1, Utility.encrypt(String.valueOf(quantitaInserita)));
 				stmt.setBytes(2, Utility.encrypt(cliente));
 				stmt.setBytes(3, Utility.encrypt(prodotto));
 				stmt.executeUpdate();
-				stmt.close();
 			}
 			catch (SQLException e) {
 				throw new DAOException("Errore nell'aggiornamento della quantità inserita");
