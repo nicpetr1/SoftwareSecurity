@@ -22,13 +22,8 @@ public class Prodotto {
 		this.quantita = quantita;
 	}
 	
-	public Prodotto(String codice) throws DAOException, DBConnectionException {
-		Prodotto prodotto = ProdottoDAO.readProdottoByCodice(codice);
-		this.codice = prodotto.codice;
-		this.nome = prodotto.nome;
-		this.descrizione = prodotto.descrizione;
-		this.prezzo = prodotto.prezzo;
-		this.quantita = prodotto.quantita;
+	public Prodotto(String codice){
+		this.codice = codice;
 	}
 	
 	public Prodotto() {
@@ -113,6 +108,14 @@ public class Prodotto {
 	
 	public void aggiorna() throws DAOException, DBConnectionException {
 	    ProdottoDAO.updateProdotto(this);
+	}
+
+	public void leggiProdottoByCodice() throws DAOException, DBConnectionException{
+		Prodotto prodotto = ProdottoDAO.readProdottoByCodice(this.codice);
+		this.nome = prodotto.nome;
+		this.descrizione = prodotto.descrizione;
+		this.prezzo = prodotto.prezzo;
+		this.quantita = prodotto.quantita;
 	}
 	
 }

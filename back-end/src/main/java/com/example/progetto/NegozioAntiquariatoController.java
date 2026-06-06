@@ -99,8 +99,10 @@ public class NegozioAntiquariatoController {
 				String username = auth.getToken().getClaimAsString("preferred_username");
 				// Costruisco il carrello associato al cliente
 				Carrello carrello = new Carrello(username);
+				carrello.leggiInserimentiByUsername();
 				// Costruisco il prodotto da aggiungere
 				Prodotto prodotto = new Prodotto(codice);
+				prodotto.leggiProdottoByCodice();
 				// Controllo se il prodotto si trova nel carrello
 				int[] risultato = carrello.checkProdottoInCarrello(codice);
 				int trovato = risultato[0];
@@ -164,6 +166,7 @@ public class NegozioAntiquariatoController {
 			// Costruisco il carrello associato al cliente
 			String username = auth.getToken().getClaimAsString("preferred_username");
 			Carrello carrello = new Carrello(username);
+			carrello.leggiInserimentiByUsername();
 			return ResponseEntity.ok(carrello.getInserimentiConProdotto());
 		} 
 		catch (DAOException | DBConnectionException e) {
@@ -185,6 +188,7 @@ public class NegozioAntiquariatoController {
 	        // 1. Recupero Username e Carrello
 	        String username = auth.getToken().getClaimAsString("preferred_username");
 	        Carrello carrello = new Carrello(username);
+			carrello.leggiInserimentiByUsername();
 
 	        // 2. Controllo esistenza prodotto
 	        int[] risultato = carrello.checkProdottoInCarrello(codice);
@@ -219,6 +223,7 @@ public class NegozioAntiquariatoController {
 
 	        // 4. Aggiornamento Magazzino (Incremento disponibilità prodotto)
 	        Prodotto prodotto = new Prodotto(codice);
+			prodotto.leggiProdottoByCodice();
 	        int quantitaDisponibile = prodotto.getQuantita();
 	        prodotto.setQuantita(quantitaDisponibile + 1);
 	        prodotto.aggiornaQuantita();
@@ -245,6 +250,7 @@ public class NegozioAntiquariatoController {
 	        
 	        // Costruisco il carrello associato all'utente
 	        Carrello carrello = new Carrello(username);
+			carrello.leggiInserimentiByUsername();
 	        
 	        // Controllo che il prodotto avente il codice specificato si trovi nel carrello
 	        int[] risultato = carrello.checkProdottoInCarrello(codice);
@@ -261,6 +267,7 @@ public class NegozioAntiquariatoController {
 	            
 	            // Aggiorno la quantità disponibile del prodotto
 	            Prodotto prodotto = new Prodotto(codice);
+				prodotto.leggiProdottoByCodice();
 	            prodotto.setQuantita(prodotto.getQuantita() + inserimentoRimosso.getQuantitaInserita());
 	            prodotto.aggiornaQuantita();
 
@@ -306,6 +313,7 @@ public class NegozioAntiquariatoController {
 	    
 	    try {
 	        Carrello carrello = new Carrello(username);
+			carrello.leggiInserimentiByUsername();
 	        // Leggo tutti i prodotti inseriti nel carrello
 	        ArrayList<Prodotto> prodotti = carrello.leggiProdottiInseriti();
 	        
@@ -417,6 +425,7 @@ public class NegozioAntiquariatoController {
 
 	    try {
 	        Carrello carrelloGlobale = new Carrello();
+			carrelloGlobale.leggiInserimenti();
 	        
 	        // Controllo se il prodotto è "bloccato" (es. nel carrello di qualcuno)
 	        if(carrelloGlobale.checkProdotto(codiceProdotto)) {
@@ -427,6 +436,7 @@ public class NegozioAntiquariatoController {
 	        
 	        // Procedo con l'eliminazione
 	        Prodotto prodotto = new Prodotto(codiceProdotto);
+			prodotto.leggiProdottoByCodice();
 	        prodotto.eliminaProdotto();
 	        
 	        responseBody.put("message", "Prodotto eliminato con successo.");

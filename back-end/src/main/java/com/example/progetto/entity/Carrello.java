@@ -21,19 +21,18 @@ public class Carrello {
 	private ArrayList<Inserimento> inserimenti;
 	private int dimensione;
 		
-	public Carrello(String cliente) throws DAOException, DBConnectionException {
-		this.cliente = cliente;
-		this.inserimenti = InserimentoDAO.readInserimentiByUsername(cliente);
-		this.dimensione = 0;
-	}
-	
-	// In questo caso il carrello è un contenitore di tutti gli inserimenti effettuati da tutti gli utenti
-	public Carrello() throws DAOException, DBConnectionException {
+	public Carrello(){
 		this.cliente = "";
-		this.inserimenti = InserimentoDAO.readInserimenti();
+		this.inserimenti = new ArrayList<Inserimento>();
 		this.dimensione = 0;
 	}
 
+	public Carrello(String username){
+		this.cliente = username;
+		this.inserimenti = new ArrayList<Inserimento>();
+		this.dimensione = 0;
+	}
+	
 	public String getCliente() {
 		return cliente;
 	}
@@ -96,7 +95,8 @@ public class Carrello {
 	        
 	        String codiceDelProdotto = this.inserimenti.get(i).getCodiceProdotto();
 	       
-	        Prodotto prodotto = new Prodotto(codiceDelProdotto); 
+	        Prodotto prodotto = new Prodotto(codiceDelProdotto);
+			prodotto.leggiProdottoByCodice(); 
 
 	        
 	        prodotti.add(prodotto);
@@ -110,5 +110,18 @@ public class Carrello {
 		}
 		this.dimensione = 0;
 	}
+
+	public void leggiInserimenti() throws DAOException, DBConnectionException{
+		ArrayList<Inserimento> inserimenti = InserimentoDAO.readInserimenti();
+		this.inserimenti = inserimenti;
+		this.dimensione = inserimenti.size();
+	}
+
+	public void leggiInserimentiByUsername() throws DAOException, DBConnectionException{
+		ArrayList<Inserimento> inserimenti = InserimentoDAO.readInserimentiByUsername(this.cliente);
+		this.inserimenti = inserimenti;
+		this.dimensione = inserimenti.size();
+	}
+
 	
 }
