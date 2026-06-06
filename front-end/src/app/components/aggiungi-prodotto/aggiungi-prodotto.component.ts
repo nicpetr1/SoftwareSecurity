@@ -19,9 +19,9 @@ export class AggiungiProdottoComponent {
     quantita: 1
   };
 
-  message: string = '';
-  isError: boolean = false;
-  isLoading: boolean = false;
+  message = '';
+  isError = false;
+  isLoading = false;
 
   constructor(
     private prodottiService: ProdottiService, 

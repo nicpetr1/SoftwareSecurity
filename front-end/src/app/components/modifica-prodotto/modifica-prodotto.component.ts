@@ -12,7 +12,7 @@ import Swal from 'sweetalert2'
 })
 export class ModificaProdottoComponent implements OnInit {
 
-  codiceProdotto: string = '';
+  codiceProdotto = '';
   public feedback: string | null = null;
   public feedbackType: 'success' | 'error' = 'success';
   private toastTimer: any = null;
@@ -24,9 +24,9 @@ export class ModificaProdottoComponent implements OnInit {
     quantita: 0
   };
 
-  isLoading: boolean = false;
-  isError: boolean = false;
-  message: string = '';
+  isLoading = false;
+  isError = false;
+  message = '';
 
   constructor(
     private route: ActivatedRoute,

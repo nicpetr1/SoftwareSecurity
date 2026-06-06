@@ -43,7 +43,7 @@ export class ProdottiService {
     const token = this.keycloakService.profile?.token; 
     
     let params = new HttpParams();
-    (Object.keys(prodotto) as Array<keyof FormInserimento>).forEach(key => {
+    (Object.keys(prodotto) as (keyof FormInserimento)[]).forEach(key => {
       const value = prodotto[key];
       if (value !== null) { 
         params = params.set(key, value.toString());
