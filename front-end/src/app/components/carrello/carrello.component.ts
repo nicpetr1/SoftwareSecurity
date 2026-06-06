@@ -1,25 +1,25 @@
-import { Component , OnInit  } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit, inject } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
 import { CarrelloService } from '../../services/carrello.service';
 import Swal from 'sweetalert2'
+import { CurrencyPipe } from '@angular/common';
 
 @Component({
     selector: 'app-carrello',
     templateUrl: './carrello.component.html',
     styleUrls: ['./carrello.component.css'],
-    standalone: false
+    imports: [RouterLink, CurrencyPipe]
 })
 export class CarrelloComponent implements OnInit {
+  private carrelloService = inject(CarrelloService);
+  private router = inject(Router);
+
 
   public items: any[] = [];
   public isLoading = true;
   public totale = 0.0;
   public checkoutMessage: { type: 'success' | 'error', text: string } | null = null;
 
-  constructor(
-    private carrelloService: CarrelloService,
-    private router: Router
-  ) { }
 
   ngOnInit(): void {
     this.caricaCarrello();

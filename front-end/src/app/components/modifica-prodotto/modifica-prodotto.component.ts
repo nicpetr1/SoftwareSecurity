@@ -1,16 +1,21 @@
-import { Component , OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProdottiService } from '../../services/prodotti.service';
 import { Prodotto } from '../../interfaces/prodotto';
 import Swal from 'sweetalert2'
+import { FormsModule } from '@angular/forms';
 
 @Component({
     selector: 'app-modifica-prodotto',
     templateUrl: './modifica-prodotto.component.html',
     styleUrls: ['./modifica-prodotto.component.css'],
-    standalone: false
+    imports: [FormsModule]
 })
 export class ModificaProdottoComponent implements OnInit {
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private prodottiService = inject(ProdottiService);
+
 
   codiceProdotto = '';
   public feedback: string | null = null;
@@ -28,11 +33,10 @@ export class ModificaProdottoComponent implements OnInit {
   isError = false;
   message = '';
 
-  constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private prodottiService: ProdottiService
-  ) {}
+  /** Inserted by Angular inject() migration for backwards compatibility */
+  constructor(...args: unknown[]);
+
+  constructor() {}
 
   ngOnInit(): void {
 

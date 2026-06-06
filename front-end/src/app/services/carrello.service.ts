@@ -1,4 +1,4 @@
-import { Injectable,} from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
@@ -8,10 +8,11 @@ import { KeycloakService } from './keycloak.service';
   providedIn: 'root'
 })
 export class CarrelloService {
+  private http = inject(HttpClient);
+  private keycloakService = inject(KeycloakService);
+
 
   private backendUrl = 'https://localhost/api';
-
-  constructor(private http: HttpClient, private keycloakService: KeycloakService) { }
 
 
 aggiungi(codiceProdotto: string, quantita: number): Observable<{ success: boolean; message: string | null }> {

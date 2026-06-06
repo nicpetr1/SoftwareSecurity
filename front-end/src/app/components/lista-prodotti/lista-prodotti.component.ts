@@ -1,18 +1,24 @@
-import { Component , OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { Prodotto } from '../../interfaces/prodotto'
 import { ProdottiService } from 'src/app/services/prodotti.service';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { CarrelloService } from 'src/app/services/carrello.service';
 import { KeycloakService } from 'src/app/services/keycloak.service';
 import Swal from 'sweetalert2';
+import { NgClass, CurrencyPipe } from '@angular/common';
 
 @Component({
     selector: 'app-lista-prodotti',
     templateUrl: './lista-prodotti.component.html',
     styleUrls: ['./lista-prodotti.component.css'],
-    standalone: false
+    imports: [RouterLink, NgClass, CurrencyPipe]
 })
 export class ListaProdottiComponent implements OnInit{
+  private prodottiService = inject(ProdottiService);
+  private keycloakService = inject(KeycloakService);
+  private router = inject(Router);
+  private carrelloService = inject(CarrelloService);
+
 
   prodotti: Prodotto[] = [];
   isLoading = true;
@@ -24,12 +30,7 @@ export class ListaProdottiComponent implements OnInit{
   public feedbackType: 'success' | 'error' = 'success';
   private toastTimer: any = null;
 
-  constructor(
-    private prodottiService: ProdottiService,
-    private keycloakService: KeycloakService,
-    private router: Router,
-    private carrelloService : CarrelloService
-  ) {}
+  constructor() {}
 
   fileChangeEvent(fileInput: any, prodotto: Prodotto) {
     

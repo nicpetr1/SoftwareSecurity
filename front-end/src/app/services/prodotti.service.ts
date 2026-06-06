@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { catchError, Observable, throwError } from 'rxjs';
 
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
@@ -11,10 +11,16 @@ import { KeycloakService } from './keycloak.service';
   providedIn: 'root'
 })
 export class ProdottiService {
+  private http = inject(HttpClient);
+  private keycloakService = inject(KeycloakService);
+
 
   private prodottiUrl = 'https://localhost/api';
 
-  constructor(private http: HttpClient, private keycloakService: KeycloakService) {
+  /** Inserted by Angular inject() migration for backwards compatibility */
+  constructor(...args: unknown[]);
+
+  constructor() {
   }
 
 

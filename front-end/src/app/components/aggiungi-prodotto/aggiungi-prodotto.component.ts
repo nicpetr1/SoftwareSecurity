@@ -1,16 +1,20 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { ProdottiService } from '../../services/prodotti.service';
 import { FormInserimento } from '../../interfaces/formInserimento';
+import { FormsModule } from '@angular/forms';
 
 @Component({
     selector: 'app-aggiungi-prodotto',
     templateUrl: './aggiungi-prodotto.component.html',
     styleUrls: ['./aggiungi-prodotto.component.css'],
-    standalone: false
+    imports: [FormsModule]
 })
 
 export class AggiungiProdottoComponent {
+  private prodottiService = inject(ProdottiService);
+  private router = inject(Router);
+
 
   formModel: FormInserimento = {
     nome: '',
@@ -22,11 +26,6 @@ export class AggiungiProdottoComponent {
   message = '';
   isError = false;
   isLoading = false;
-
-  constructor(
-    private prodottiService: ProdottiService, 
-    private router: Router
-  ) {}
 
   onSubmit() {
     this.isLoading = true;
