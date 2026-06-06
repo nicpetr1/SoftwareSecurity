@@ -12,7 +12,7 @@ jobs:
   # ==========================================
   backend-test:
     name: Spring Boot Tests & Build
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     # Diciamo a GitHub in quale cartella eseguire i comandi
     defaults:
       run:
@@ -34,7 +34,7 @@ jobs:
   # ==========================================
   frontend-test:
     name: Angular Lint & Tests
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     defaults:
       run:
         working-directory: ./front-end
