@@ -16,15 +16,13 @@ public class OrdineDAO {
 	public static void createOrdine(Ordine ordine) throws DAOException, DBConnectionException {
 		try {
 			Connection conn = DBManager.getConnection();
-			try {
-				String query = "INSERT INTO Ordini(codice, data, prezzoComplessivo, cliente) VALUES (?, ?, ?, ?)";
-				PreparedStatement stmt = conn.prepareStatement(query);
+			String query = "INSERT INTO Ordini(codice, data, prezzoComplessivo, cliente) VALUES (?, ?, ?, ?)";
+			try(PreparedStatement stmt = conn.prepareStatement(query)){
 				stmt.setBytes(1, Utility.encrypt(ordine.getCodice()));
 				stmt.setBytes(2, Utility.encrypt(ordine.getData().toString()));
 				stmt.setBytes(3, Utility.encrypt(String.valueOf(ordine.getPrezzoComplessivo())));
 				stmt.setBytes(4, Utility.encrypt(ordine.getCliente()));
 				stmt.executeUpdate();
-				stmt.close();
 			}
 			catch (SQLException e) {
 				throw new DAOException("Errore nella creazione dell'ordine");

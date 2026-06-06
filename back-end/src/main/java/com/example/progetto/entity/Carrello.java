@@ -65,7 +65,7 @@ public class Carrello {
 				this.inserimenti.get(i).caricaProdotto();
 			} 
 			catch (DAOException | DBConnectionException e) {
-				return null;
+				return new ArrayList<>(this.inserimenti);
 			}
 		}
 		return new ArrayList<>(this.inserimenti);

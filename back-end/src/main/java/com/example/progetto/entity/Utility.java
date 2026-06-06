@@ -19,6 +19,8 @@ import org.springframework.vault.support.VaultResponse;
 import com.example.progetto.ProgettoApplication;
 
 public class Utility {
+	
+	private static final Random random = new Random();
 
 	public static int[] checkProdottoInCarrello(ArrayList<Inserimento> inserimenti, String codice) {
 		int trovato = 0;
@@ -80,7 +82,6 @@ public class Utility {
 		stringBuilder.append(dataValues[1]);
 		stringBuilder.append(dataValues[2]);
 		stringBuilder.append(username.substring(0, 2));
-		Random random = new Random();
 		int paddingLength = 16 - stringBuilder.length();
 		for(int i = 0; i<paddingLength; i++) {
 			stringBuilder.append(baseGeneratore.charAt(random.nextInt(baseGeneratore.length())));
@@ -99,7 +100,6 @@ public class Utility {
 	public static String creaCodiceProdotto() {
 		String baseGeneratore = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 		StringBuilder stringBuilder = new StringBuilder();
-		Random random = new Random();
 		int length = 16;
 		for(int i=0; i<length; i++) {
 			stringBuilder.append(baseGeneratore.charAt(random.nextInt(baseGeneratore.length())));
@@ -140,7 +140,7 @@ public class Utility {
             System.out.println(e.getMessage());
         }
  
-		return null;
+		return new byte[0];
 	}
 	
 	public static String decrypt(byte[] value) {
@@ -167,14 +167,14 @@ public class Utility {
             SecretKey key = new SecretKeySpec(decodedKey, "AES");
             Cipher cipher = Cipher.getInstance("AES");
     		cipher.init(Cipher.DECRYPT_MODE, key);
-    		String cleartext = new String(cipher.doFinal(value));
+    		String cleartext = new String(cipher.doFinal(value), StandardCharsets.UTF_8);
     		return cleartext;
  
         } catch (Exception e) {
             e.getMessage();
         }
  
-		return null;
+		return "";
 	}
 
 	
