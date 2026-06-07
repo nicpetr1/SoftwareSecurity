@@ -34,7 +34,7 @@ jobs:
         cache: maven
 
     - name: Esegui Analisi Statica
-      run: mvn -B clean verify -DskipTests -DnvdApiKey=d6b2f54a-5313-4a4b-a014-b6ce2edfc3f9
+      run: mvn -B clean verify -DskipTests -DnvdApiKey=${{ secrets.NVD_API_KEY }}
 
   # ==========================================
   # JOB 2: FRONT-END (Angular)
