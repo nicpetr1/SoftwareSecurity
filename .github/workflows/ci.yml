@@ -13,7 +13,7 @@ jobs:
   backend-test:
     name: Spring Boot Tests & Build
     runs-on: windows-latest
-    # Diciamo a GitHub in quale cartella eseguire i comandi
+
     defaults:
       run:
         working-directory: ./back-end 
@@ -27,7 +27,10 @@ jobs:
       with:
         java-version: '17'
         distribution: 'temurin'
-        cache: maven # Velocizza le build future salvando in cache le dipendenze
+        cache: maven
+
+    - name: Esegui Analisi Statica
+      run: mvn -B clean verify -DskipTests
 
   # ==========================================
   # JOB 2: FRONT-END (Angular)
