@@ -82,9 +82,12 @@ public class DBManager {
 	            // 3. GESTIONE KV v2: Controlla se c'è un ulteriore oggetto "data" annidato
 	            String username = null;
 	            String password = null;
-	 	           
             
-                Map<String, Object> realData = (Map<String, Object>) topLevelData.get("data");
+				Object dataObj = topLevelData.get("data");
+				if (!(dataObj instanceof Map<?, ?> realData)) {
+					throw new SQLException("Dati non validi in: " + path);
+				}
+
                 username = (String) realData.get("username");
                 password = (String) realData.get("password");
 	 

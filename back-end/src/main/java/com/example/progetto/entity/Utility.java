@@ -123,9 +123,14 @@ public class Utility {
 				throw new IllegalStateException("Errore");
             }
  
-            Map<String, Object> topLevelData = response.getData();          
-          
-            Map<String, Object> realData = (Map<String, Object>) topLevelData.get("data");
+            Map<String, Object> topLevelData = response.getData();
+			Object dataObj = topLevelData.get("data");
+			
+			if (!(dataObj instanceof Map<?, ?> realData)) {
+				System.out.println("Errore: campo 'data' non valido");
+				return null;
+			}
+
             String base64Key = (String) realData.get("key"); 
             byte[] decodedKey = Base64.getDecoder().decode(base64Key.getBytes(StandardCharsets.UTF_8));         
             // 2. Crea la SecretKey (specificando l'algoritmo, es. "AES")    
@@ -160,9 +165,15 @@ public class Utility {
 				throw new IllegalStateException("Errore");
             }
  
-            Map<String, Object> topLevelData = response.getData();           
-          
-            Map<String, Object> realData = (Map<String, Object>) topLevelData.get("data");
+            Map<String, Object> topLevelData = response.getData();        
+			
+			Object dataObj = topLevelData.get("data");
+
+			if (!(dataObj instanceof Map<?, ?> realData)) {
+				System.out.println("Errore: campo 'data' non valido");
+				return null;
+			}
+
             String base64Key = (String) realData.get("key"); 
             byte[] decodedKey = Base64.getDecoder().decode(base64Key.getBytes(StandardCharsets.UTF_8));         
             // 2. Crea la SecretKey (specificando l'algoritmo, es. "AES")    

@@ -1,18 +1,18 @@
 package com.example.progetto;
 
+import java.net.URI;
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.web.server.ConfigurableWebServerFactory;
 import org.springframework.boot.web.server.Ssl;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
-import org.springframework.boot.web.server.ConfigurableWebServerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.vault.authentication.TokenAuthentication;
 import org.springframework.vault.client.VaultEndpoint;
 import org.springframework.vault.core.VaultTemplate;
 import org.springframework.vault.support.VaultResponse;
-
-import java.net.URI;
-import java.util.Map;
 
 @Component
 public class SSLConfig implements WebServerFactoryCustomizer<ConfigurableWebServerFactory> {
@@ -46,12 +46,14 @@ public class SSLConfig implements WebServerFactoryCustomizer<ConfigurableWebServ
             }
 
             
-            Map<String, Object> topLevelData = response.getData();
-            Map<String, Object> realData = (Map<String, Object>) topLevelData.get("data");
+            Map<String, Object> topLevelData = response.getData();        
+			
+			Object dataObj = topLevelData.get("data");
 
-            if (realData == null) {
-                throw new IllegalStateException("Formato risposta Vault non valido (manca 'data' interno). Sei sicuro di usare KV v2?");
-            }
+			if (!(dataObj instanceof Map<?, ?> realData)) {
+				System.out.println("Errore: campo 'data' non valido");
+				throw new IllegalStateException("Formato risposta Vault non valido (manca 'data' interno). Sei sicuro di usare KV v2?");
+			}
 
             String password = (String) realData.get("password");
 

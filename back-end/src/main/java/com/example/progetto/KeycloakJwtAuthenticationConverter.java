@@ -1,6 +1,7 @@
 package com.example.progetto;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,12 +32,31 @@ public class KeycloakJwtAuthenticationConverter implements Converter<Jwt, Abstra
 	}
 	
 	private Collection<? extends GrantedAuthority> extractResourceRoles(Jwt jwt){
-		var resourceAccess = new HashMap<>(jwt.getClaim("resource_access"));
-		var eternal = (Map<String, List<String>>) resourceAccess.get("neg-ant-client");
-		var roles = eternal.get("roles");
+
+		Object resourceAccessObj = jwt.getClaim("resource_access");
+
+		if (!(resourceAccessObj instanceof Map<?, ?> resourceAccess)) {
+			return Collections.emptySet();
+		}
+
+		Object clientObj = resourceAccess.get("neg-ant-client");
+
+		if (!(clientObj instanceof Map<?, ?> clientAccess)) {
+			return Collections.emptySet();
+		}
+
+		Object rolesObj = clientAccess.get("roles");
+
+		if (!(rolesObj instanceof List<?> roles)) {
+			return Collections.emptySet();
+		}
+
+		
 		return roles.stream()
-				.map(role -> new SimpleGrantedAuthority("ROLE_" + role.replace("-", "_")))
-				.collect(Collectors.toSet());
+            .filter(String.class::isInstance)
+            .map(String.class::cast)
+            .map(role -> new SimpleGrantedAuthority("ROLE_" + role.replace("-", "_")))
+            .collect(Collectors.toSet());
 	}
 
 }
