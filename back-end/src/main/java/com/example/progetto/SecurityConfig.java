@@ -26,8 +26,8 @@ public class SecurityConfig {
 				.frameOptions(frameOptions -> frameOptions.deny())
 				  .contentSecurityPolicy(csp -> csp                
 						  .policyDirectives("default-src 'self'; " +                                   
-				  "script-src 'self' 'unsafe-inline' https://trusted-scripts.com; " +       
-         "style-src 'self' 'unsafe-inline'; " + "img-src 'self' data:; " + "frame-ancestors 'none';"))) 
+				  "script-src 'self'; " +       
+         "style-src 'self'; " + "img-src 'self' data:; " + "frame-ancestors 'none';"))) 
 				
 			.cors(Customizer.withDefaults())
 			.csrf(AbstractHttpConfigurer::disable)
